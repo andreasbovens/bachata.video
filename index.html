@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>bachata.video — non-stop videos of the best bachata music</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="bachata.video shows non-stop YouTube videos of the best bachata songs. Turn it on, and enjoy the music!" />
+    <meta name="theme-color" content="#0a0014" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Familjen+Grotesk:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="msapplication-TileColor" content="#0a0014" />
+
+    <meta property="og:title" content="bachata.video" />
+    <meta property="og:description" content="A website with non-stop videos of the best bachata music" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bachata.video/" />
+    <meta property="og:image" content="https://bachata.video/bachatatv-24062020.png" />
+    <meta name="twitter:card" content="summary" />
+
+    <style>
+      :root {
+        --bg: #0a0014;
+        --bg-2: #14001f;
+        --ink: #fff5e8;
+        --ink-dim: #a78baa;
+        --magenta: #ff2d8a;
+        --coral: #ff5b3a;
+        --sun: #ffc94d;
+        --cyan: #00e0c7;
+        --lilac: #b478ff;
+        --hairline: rgba(255, 245, 232, 0.12);
+        --hairline-strong: rgba(255, 245, 232, 0.25);
+        --dock-bg: rgba(20, 0, 31, 0.72);
+        --shadow-glow: 0 0 80px rgba(255, 45, 138, 0.35);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Familjen Grotesk", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        overscroll-behavior: none;
+      }
+
+      body {
+        min-height: 100vh;
+        min-height: 100svh;
+        overflow: hidden;
+      }
+
+      /* Ambient background */
+      .ambient {
+        position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        background:
+          radial-gradient(ellipse 60% 50% at 15% 10%, rgba(255, 45, 138, 0.22), transparent 60%),
+          radial-gradient(ellipse 50% 40% at 85% 0%, rgba(255, 201, 77, 0.14), transparent 60%),
+          radial-gradient(ellipse 70% 60% at 90% 100%, rgba(180, 120, 255, 0.18), transparent 60%),
+          radial-gradient(ellipse 60% 50% at 0% 100%, rgba(0, 224, 199, 0.10), transparent 60%),
+          var(--bg);
+      }
+
+      .grain {
+        position: fixed; inset: 0; z-index: 1; pointer-events: none;
+        opacity: 0.06; mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      }
+
+      /* Layout shell */
+      .shell {
+        position: relative; z-index: 2;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        height: 100vh; height: 100svh;
+      }
+
+      /* Header */
+      header {
+        padding: 18px 22px 12px;
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      }
+
+      .brand { display: flex; align-items: baseline; gap: 10px; line-height: 1; }
+
+      .brand-mark {
+        font-family: "Bricolage Grotesque", serif;
+        font-weight: 800;
+        font-size: clamp(24px, 3.6vw, 34px);
+        letter-spacing: -0.035em;
+        color: var(--ink);
+      }
+
+      .brand-mark .dot { color: var(--magenta); }
+
+      .brand-mark .tld {
+        font-family: "Instrument Serif", serif;
+        font-style: italic; font-weight: 400;
+        color: var(--sun);
+      }
+
+      .tagline {
+        font-family: "Instrument Serif", serif;
+        font-style: italic;
+        color: var(--ink-dim);
+        font-size: 14px;
+        letter-spacing: 0.01em;
+        display: none;
+      }
+
+      @media (min-width: 720px) { .tagline { display: block; } }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.85); }
+      }
+
+      /* Stage */
+      .stage {
+        position: relative;
+        margin: 0 22px;
+        border-radius: 22px;
+        overflow: hidden;
+        background: #000;
+        box-shadow: var(--shadow-glow), 0 24px 80px rgba(0, 0, 0, 0.5);
+        border: 1px solid var(--hairline);
+      }
+
+      .stage::before {
+        content: "";
+        position: absolute; inset: -2px;
+        border-radius: 24px;
+        padding: 2px;
+        background: linear-gradient(135deg, var(--magenta), var(--coral) 40%, var(--sun) 70%, var(--lilac));
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0.6;
+        pointer-events: none;
+        z-index: 3;
+      }
+
+      #player { width: 100%; height: 100%; border: 0; display: block; }
+      .stage iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+      .install-btn {
+        display: none;
+        align-items: center; justify-content: center;
+        width: 32px; height: 32px;
+        border: 1px solid var(--hairline);
+        border-radius: 999px;
+        color: var(--ink-dim);
+        background: rgba(255, 245, 232, 0.04);
+        cursor: pointer;
+        transition: color 0.15s, border-color 0.15s, background 0.15s;
+        flex-shrink: 0;
+      }
+
+      .install-btn:hover { color: var(--ink); border-color: var(--hairline-strong); background: rgba(255,245,232,0.08); }
+      .install-btn svg { width: 15px; height: 15px; }
+      .install-btn.visible { display: inline-flex; }
+
+      .header-right {
+        display: flex; align-items: center; gap: 6px;
+      }
+
+      .now-playing {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 6px 12px;
+        border: 1px solid var(--hairline-strong);
+        border-radius: 999px;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        color: var(--ink);
+        background: rgba(255, 245, 232, 0.04);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        white-space: nowrap;
+      }
+
+      .now-playing::before {
+        content: "";
+        width: 7px; height: 7px; border-radius: 50%;
+        background: var(--magenta);
+        box-shadow: 0 0 12px var(--magenta);
+        animation: pulse 1.6s ease-in-out infinite;
+        flex-shrink: 0;
+      }
+
+      .now-playing .ch { text-transform: uppercase; color: var(--sun); font-weight: 700; }
+      .now-playing .ch-name { color: var(--ink-dim); }
+
+      /* Bottom dock */
+      .dock { padding: 14px 14px max(14px, env(safe-area-inset-bottom)); }
+
+      .dock-inner {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 12px;
+        background: var(--dock-bg);
+        backdrop-filter: blur(20px) saturate(140%);
+        -webkit-backdrop-filter: blur(20px) saturate(140%);
+        border: 1px solid var(--hairline);
+        border-radius: 20px;
+      }
+
+      @media (min-width: 720px) {
+        .dock-inner { grid-template-columns: 1fr auto; align-items: center; }
+      }
+
+      .channels {
+        display: flex; gap: 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        scroll-snap-type: x mandatory;
+        padding: 2px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .channels::-webkit-scrollbar { display: none; }
+
+      .chan {
+        flex: 0 0 auto;
+        scroll-snap-align: start;
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 16px;
+        border-radius: 14px;
+        background: rgba(255, 245, 232, 0.04);
+        border: 1px solid var(--hairline);
+        color: var(--ink);
+        text-decoration: none;
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 1;
+        letter-spacing: -0.01em;
+        transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        white-space: nowrap;
+      }
+
+      .chan:hover {
+        background: rgba(255, 245, 232, 0.08);
+        border-color: var(--hairline-strong);
+        transform: translateY(-1px);
+      }
+
+      .chan.is-active {
+        background: linear-gradient(135deg, var(--magenta), var(--coral));
+        border-color: transparent;
+        color: var(--bg);
+        box-shadow: 0 8px 28px rgba(255, 45, 138, 0.4);
+      }
+
+      .chan-custom {
+        position: sticky;
+        right: 0;
+        background: rgba(10, 0, 20, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-color: var(--hairline-strong);
+        cursor: pointer;
+        color: var(--lilac);
+      }
+
+      /* Custom input — hidden until custom-mode */
+      .custom-input {
+        display: none;
+        min-width: 0;
+        background: rgba(255, 245, 232, 0.06);
+        border: 1px solid var(--hairline-strong);
+        border-radius: 10px;
+        padding: 10px 14px;
+        color: var(--ink);
+        font-family: "Familjen Grotesk", system-ui, sans-serif;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .custom-input::placeholder { color: var(--ink-dim); }
+      .custom-input:focus { border-color: var(--lilac); box-shadow: 0 0 0 2px rgba(180,120,255,0.2); }
+
+      /* Play button — hidden until custom-mode */
+      .ctrl.custom-play {
+        display: none;
+        width: auto;
+        padding: 0 16px;
+        background: var(--lilac);
+        color: var(--bg);
+        border-color: transparent;
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.05em;
+      }
+
+      .ctrl.custom-play:hover { background: #c496ff; }
+
+      /* Custom mode: swap channels out, input in */
+      .dock-inner.custom-mode .channels { display: none; }
+      .dock-inner.custom-mode .custom-input { display: block; }
+      .dock-inner.custom-mode .ctrl.custom-play { display: inline-flex; }
+
+      .controls {
+        display: flex; gap: 8px; align-items: center;
+        padding-left: 6px;
+        border-left: 1px solid var(--hairline);
+      }
+
+      @media (max-width: 719px) {
+        .controls {
+          border-left: 0;
+          padding-left: 0;
+          justify-content: flex-end;
+          padding-top: 6px;
+          border-top: 1px solid var(--hairline);
+        }
+      }
+
+      .ctrl {
+        width: 44px; height: 44px;
+        display: inline-flex; align-items: center; justify-content: center;
+        border-radius: 12px;
+        border: 1px solid var(--hairline);
+        background: rgba(255, 245, 232, 0.04);
+        color: var(--ink);
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+      }
+
+      .ctrl:hover {
+        background: rgba(255, 245, 232, 0.1);
+        border-color: var(--hairline-strong);
+        transform: translateY(-1px);
+      }
+
+      .ctrl:active { transform: translateY(0) scale(0.96); }
+
+      .ctrl.primary {
+        background: var(--sun);
+        color: var(--bg);
+        border-color: transparent;
+      }
+
+      .ctrl.primary:hover { background: #ffd96f; }
+
+      .ctrl svg { width: 20px; height: 20px; }
+
+      /* Cookie banner */
+      #cookies-eu-banner {
+        position: fixed; inset: 0; z-index: 50;
+        display: none;
+        align-items: center; justify-content: center;
+        padding: 24px;
+        background: rgba(10, 0, 20, 0.78);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+
+      #cookies-eu-banner > div {
+        max-width: 520px;
+        padding: 28px;
+        border-radius: 20px;
+        background: linear-gradient(180deg, var(--bg-2), var(--bg));
+        border: 1px solid var(--hairline-strong);
+        color: var(--ink);
+        box-shadow: var(--shadow-glow);
+      }
+
+      #cookies-eu-banner h2 {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 800;
+        font-size: 22px;
+        margin: 0 0 10px;
+        letter-spacing: -0.01em;
+      }
+
+      #cookies-eu-banner p {
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--ink-dim);
+        margin: 0 0 12px;
+      }
+
+      #cookies-eu-banner a {
+        color: var(--sun);
+        text-decoration: underline;
+        text-decoration-color: rgba(255, 201, 77, 0.4);
+        text-underline-offset: 3px;
+      }
+
+      #cookies-eu-banner button {
+        margin-top: 16px;
+        padding: 12px 22px;
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.04em;
+        color: var(--bg);
+        background: linear-gradient(135deg, var(--magenta), var(--coral));
+        border: 0;
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(255, 45, 138, 0.4);
+        transition: transform 0.15s ease;
+      }
+
+      #cookies-eu-banner button:hover { transform: translateY(-1px); }
+
+      .ctrl-meta {
+        display: flex; flex-direction: column; align-items: flex-end; gap: 3px;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .ctrl-meta a { color: var(--ink-dim); text-decoration: none; }
+      .ctrl-meta a:hover { color: var(--ink); }
+
+      @media (max-width: 520px) {
+        header { padding: 14px 14px 8px; }
+        .stage { margin: 0; border-radius: 0; border-left: 0; border-right: 0; }
+        .stage::before { display: none; }
+        .dock { padding: 10px; }
+      }
+    </style>
+
+    <script src="https://cdn.usefathom.com/script.js" site="ELPKMBYN" defer></script>
+  </head>
+  <body>
+    <div class="ambient"></div>
+    <div class="grain"></div>
+
+    <div id="cookies-eu-banner" style="display: none">
+      <div>
+        <h2>Cookies &amp; Privacy</h2>
+        <p>
+          bachata.video doesn't use cookies (not even for site analytics),
+          except one to remember your acceptance of this banner, if you choose
+          to do so. By clicking "Accept" below, you agree to our
+          <a href="privacy.html">privacy policy</a>.
+        </p>
+        <p>
+          The embedded YouTube Player on this site might use cookies. By
+          clicking "Accept" and using the YouTube Player on this site, you
+          accept YouTube's
+          <a href="https://www.youtube.com/t/terms">Terms of Service</a> and
+          <a href="http://www.google.com/policies/privacy">privacy policy</a>.
+        </p>
+        <button id="cookies-eu-accept">Accept &amp; press play</button>
+      </div>
+    </div>
+
+    <div class="shell">
+      <header>
+        <div class="brand">
+          <span class="brand-mark">bachata<span class="dot">.</span><span class="tld">video</span></span>
+        </div>
+        <span class="tagline">non-stop videos of the best bachata music</span>
+        <div class="header-right">
+          <button class="install-btn" id="install-btn" aria-label="Add to home screen" title="Add to home screen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 16V4M8 12l4 4 4-4"/><rect x="3" y="18" width="18" height="3" rx="1"/>
+            </svg>
+          </button>
+          <span class="now-playing" id="livepill"><span class="ch">Now</span><span class="ch-name" id="channel-label-header">New Bachata</span></span>
+        </div>
+      </header>
+
+      <div class="stage">
+        <div id="player"></div>
+      </div>
+
+      <nav class="dock">
+        <div class="dock-inner">
+          <div class="channels" role="tablist" aria-label="Channels">
+            <a class="chan" href="/" id="new">New Bachata</a>
+            <a class="chan" href="?list=tophits" id="tophits">Top Hits</a>
+            <a class="chan" href="?list=takemeback" id="takemeback">Take Me Back</a>
+            <a class="chan" href="?list=live" id="live">Live</a>
+            <a class="chan" href="?list=dance" id="dance">Dance Demos</a>
+            <button class="chan chan-custom" id="custombtn" title="Load custom playlist">+ Custom</button>
+          </div>
+          <input class="custom-input" id="custom-url" type="url" placeholder="Paste a YouTube playlist URL…" autocomplete="off" spellcheck="false" />
+          <div class="controls" aria-label="Player controls">
+            <button class="ctrl custom-play" id="custom-load">Play</button>
+            <div class="ctrl-meta">
+              <a href="privacy.html">Privacy</a>
+              <a href="#" id="custom-reset">Reset cookies</a>
+            </div>
+            <button class="ctrl" id="nextsong" title="Next song" aria-label="Next song">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+              </svg>
+            </button>
+            <button class="ctrl primary" id="fullscreen" title="Fullscreen" aria-label="Fullscreen">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+              </svg>
+            </button>
+          </div>
+      </nav>
+    </div>
+
+    <script>
+      /*!
+       * Cookies-EU-banner (https://github.com/Alex-D/Cookies-EU-banner)
+       * by Alexandre Demode (Alex-D) — MIT License
+       * Inlined for single-file delivery.
+       */
+      (function (root, factory) {
+        'use strict';
+        if (typeof define === 'function' && define.amd) {
+          define([], factory);
+        } else if (typeof exports === 'object') {
+          module.exports = factory();
+        } else {
+          root.CookiesEuBanner = factory();
+        }
+      }(window, function () {
+        'use strict';
+        var CookiesEuBanner, document = window.document;
+
+        CookiesEuBanner = function (launchFunction, waitAccept, useLocalStorage) {
+          if (!(this instanceof CookiesEuBanner)) {
+            return new CookiesEuBanner(launchFunction);
+          }
+          this.cookieTimeout = 31104000000; // 12 months
+          this.bots = /bot|crawler|spider|crawling/i;
+          this.cookieName = 'hasConsent';
+          this.trackingCookiesNames = ['__utma','__utmb','__utmc','__utmt','__utmv','__utmz','_ga','_gat','_gid'];
+          this.launchFunction = launchFunction;
+          this.waitAccept = waitAccept || false;
+          this.useLocalStorage = useLocalStorage || false;
+          this.init();
+        };
+
+        CookiesEuBanner.prototype = {
+          init: function () {
+            var isBot = this.bots.test(navigator.userAgent);
+
+            if (isBot) {
+              this.removeBanner(0);
+              return false;
+            }
+            if (this.hasConsent() === true) {
+              this.launchFunction();
+              return true;
+            }
+            this.showBanner();
+            if (!this.waitAccept) {
+              this.setConsent(true);
+            }
+          },
+
+          showBanner: function () {
+            var _this = this,
+                getElementById = document.getElementById.bind(document),
+                banner = getElementById('cookies-eu-banner'),
+                rejectButton = getElementById('cookies-eu-reject'),
+                acceptButton = getElementById('cookies-eu-accept'),
+                moreLink = getElementById('cookies-eu-more'),
+                waitRemove = (banner.dataset.waitRemove === undefined) ? 0 : parseInt(banner.dataset.waitRemove),
+                addClickListener = this.addClickListener,
+                removeBanner = _this.removeBanner.bind(_this, waitRemove);
+
+            banner.style.display = 'flex';
+
+            if (moreLink) {
+              addClickListener(moreLink, function () { _this.deleteCookie(_this.cookieName); });
+            }
+            if (acceptButton) {
+              addClickListener(acceptButton, function () {
+                removeBanner();
+                _this.setConsent(true);
+                _this.launchFunction();
+              });
+            }
+            if (rejectButton) {
+              addClickListener(rejectButton, function () {
+                removeBanner();
+                _this.setConsent(false);
+                _this.trackingCookiesNames.map(_this.deleteCookie);
+              });
+            }
+          },
+
+          setConsent: function (consent) {
+            if (this.useLocalStorage) {
+              return localStorage.setItem(this.cookieName, consent);
+            }
+            this.setCookie(this.cookieName, consent);
+          },
+
+          hasConsent: function () {
+            var cookieName = this.cookieName;
+            var isCookieSetTo = function (value) {
+              return document.cookie.indexOf(cookieName + '=' + value) > -1 || localStorage.getItem(cookieName) === value;
+            };
+            if (isCookieSetTo('true')) return true;
+            if (isCookieSetTo('false')) return false;
+            return null;
+          },
+
+          setCookie: function (name, value) {
+            var date = new Date();
+            date.setTime(date.getTime() + this.cookieTimeout);
+            document.cookie = name + '=' + value + ';expires=' + date.toGMTString() + ';path=/' + ';secure;SameSite=Lax';
+          },
+
+          deleteCookie: function (name) {
+            var hostname = document.location.hostname.replace(/^www\./, ''),
+                commonSuffix = '; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/';
+            document.cookie = name + '=; domain=.' + hostname + commonSuffix;
+            document.cookie = name + '=' + commonSuffix;
+          },
+
+          addClickListener: function (DOMElement, callback) {
+            if (DOMElement.attachEvent) {
+              return DOMElement.attachEvent('onclick', callback);
+            }
+            DOMElement.addEventListener('click', callback);
+          },
+
+          removeBanner: function (wait) {
+            var banner = document.getElementById('cookies-eu-banner');
+            if (!banner) return;
+            banner.classList.add('cookies-eu-banner--before-remove');
+            setTimeout(function () {
+              if (banner && banner.parentNode) {
+                banner.parentNode.removeChild(banner);
+              }
+            }, wait);
+          }
+        };
+
+        return CookiesEuBanner;
+      }));
+    </script>
+
+    <script>
+      let player;
+      let playlistID;
+
+      function getQueryVariable(variable) {
+        const query = window.location.search.substring(1);
+        const vars = query.split("&");
+        for (let i = 0; i < vars.length; i++) {
+          const pair = vars[i].split("=");
+          if (pair[0] === variable) return pair[1];
+        }
+        return false;
+      }
+
+      const channels = {
+        takemeback: { id: "PL5L0FK6aUro8jjOLYZshycDNSIkEEzlEv", label: "Take Me Back" },
+        tophits:    { id: "PL5L0FK6aUro-UOa4vMumD2HbhxHxQpeuH", label: "Top Hits" },
+        live:       { id: "PL5L0FK6aUro9U3yomEI9HQzxPQ91ca8yb", label: "Live" },
+        dance:      { id: "PL5L0FK6aUro-H1xHRBkR-p5InxhXiUjxA", label: "Dance Demos" },
+        new:        { id: "PL5L0FK6aUro8Sl16QdpZ-97Aeoz-mophp", label: "New Bachata" }
+      };
+
+      const key = ["takemeback", "tophits", "live", "dance"].includes(getQueryVariable("list"))
+        ? getQueryVariable("list")
+        : "new";
+
+      playlistID = channels[key].id;
+      document.querySelector("#" + key).classList.add("is-active");
+      document.getElementById("channel-label-header").textContent = channels[key].label;
+
+      const cookiesBanner = new CookiesEuBanner(function () {
+        const tag = document.createElement("script");
+        tag.src = "https://www.youtube.com/player_api";
+        const firstScriptTag = document.getElementsByTagName("script")[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      }, true);
+
+      function onPlayerReady(event) {
+        event.target.playVideo();
+        event.target.setLoop(true);
+        player.setShuffle(true);
+      }
+
+      function onPlayerError() { if (player) player.nextVideo(); }
+
+      let stuckTimer = null;
+      function onPlayerStateChange(event) {
+        clearTimeout(stuckTimer);
+        // State -1 (unstarted) means the player loaded a video but couldn't play it —
+        // typically an embed-restricted video that won't fire onError. Skip after 2s.
+        if (event.data === -1) {
+          stuckTimer = setTimeout(() => {
+            if (player && player.getPlayerState() === -1) player.nextVideo();
+          }, 2000);
+        }
+      }
+
+      function onPlayerPlaybackQualityChange() {}
+
+      function createPlayer(listId) {
+        if (player) { player.destroy(); player = null; }
+        player = new YT.Player("player", {
+          host: "https://www.youtube-nocookie.com",
+          height: "1080",
+          width: "1920",
+          videoId: "",
+          playerVars: {
+            index: Math.floor(Math.random() * 20 + 1),
+            list: listId,
+            controls: 1,
+            rel: 0,
+            autoplay: 1,
+            color: "white",
+            fs: 0,
+            iv_load_policy: 3,
+            modestbranding: 1
+          },
+          events: {
+            onReady: onPlayerReady,
+            onError: onPlayerError,
+            onStateChange: onPlayerStateChange,
+            onPlaybackQualityChange: onPlayerPlaybackQualityChange
+          }
+        });
+      }
+
+      function onYouTubeIframeAPIReady() {
+        createPlayer(playlistID);
+      }
+
+      document.querySelector("#nextsong").addEventListener("click", function () {
+        if (player) player.nextVideo();
+      });
+
+      function launchIntoFullscreen(element) {
+        if (element.requestFullscreen) element.requestFullscreen();
+        else if (element.mozRequestFullScreen) element.mozRequestFullScreen();
+        else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
+        else if (element.msRequestFullscreen) element.msRequestFullscreen();
+      }
+
+      document.querySelector("#fullscreen").addEventListener("click", function () {
+        launchIntoFullscreen(document.querySelector(".stage"));
+      });
+
+      document.querySelector("#custom-reset").addEventListener("click", function (e) {
+        e.preventDefault();
+        cookiesBanner.deleteCookie(cookiesBanner.cookieName);
+        window.location.reload();
+      });
+
+      /* Fathom — preserve original goal IDs */
+      document.getElementById("tophits").addEventListener("click", () => { if (window.fathom) fathom.trackGoal("H6APMBDU", 0); });
+      document.getElementById("takemeback").addEventListener("click", () => { if (window.fathom) fathom.trackGoal("F5F1RTCF", 0); });
+      document.getElementById("new").addEventListener("click", () => { if (window.fathom) fathom.trackGoal("LXLXSOJ9", 0); });
+      document.getElementById("live").addEventListener("click", () => { if (window.fathom) fathom.trackGoal("7Y7HMJM6", 0); });
+      document.getElementById("dance").addEventListener("click", () => { if (window.fathom) fathom.trackGoal("EVCRG08W", 0); });
+      document.getElementById("nextsong").addEventListener("click", () => { if (window.fathom) fathom.trackGoal("DOTUMP6K", 0); });
+      document.getElementById("fullscreen").addEventListener("click", () => { if (window.fathom) fathom.trackGoal("P9K5IA6D", 0); });
+      document.getElementById("custom-reset").addEventListener("click", () => { if (window.fathom) fathom.trackGoal("VINEWHN7", 0); });
+
+      // Custom playlist
+      const customBtn = document.getElementById("custombtn");
+      const dockInner = document.querySelector(".dock-inner");
+      const customUrlInput = document.getElementById("custom-url");
+      const customLoad = document.getElementById("custom-load");
+
+      const savedCustom = localStorage.getItem("customPlaylist");
+      if (savedCustom) customUrlInput.value = savedCustom;
+
+      customBtn.addEventListener("click", () => {
+        const isOpen = dockInner.classList.toggle("custom-mode");
+        if (isOpen) customUrlInput.focus();
+      });
+
+      function extractPlaylistId(raw) {
+        try {
+          return new URL(raw).searchParams.get("list") || raw.trim();
+        } catch {
+          return raw.trim();
+        }
+      }
+
+      function loadCustomPlaylist() {
+        const listId = extractPlaylistId(customUrlInput.value);
+        if (!listId) return;
+        localStorage.setItem("customPlaylist", customUrlInput.value);
+        document.querySelectorAll(".chan").forEach(c => c.classList.remove("is-active"));
+        customBtn.classList.add("is-active");
+        document.getElementById("channel-label-header").textContent = "Custom";
+        dockInner.classList.remove("custom-mode");
+        createPlayer(listId);
+      }
+
+      customLoad.addEventListener("click", loadCustomPlaylist);
+      customUrlInput.addEventListener("keydown", e => {
+        if (e.key === "Enter") loadCustomPlaylist();
+        if (e.key === "Escape") customBar.classList.remove("is-open");
+      });
+
+      // Install prompt
+      const installBtn = document.getElementById("install-btn");
+      let deferredPrompt;
+
+      window.addEventListener("beforeinstallprompt", e => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.classList.add("visible");
+      });
+
+      installBtn.addEventListener("click", async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        installBtn.classList.remove("visible");
+      });
+
+      window.addEventListener("appinstalled", () => {
+        installBtn.classList.remove("visible");
+      });
+
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js").catch(() => {});
+      }
+    </script>
+  </body>
+</html>
