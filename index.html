@@ -705,17 +705,7 @@
 
       function onPlayerError() { if (player) player.nextVideo(); }
 
-      let stuckTimer = null;
-      function onPlayerStateChange(event) {
-        clearTimeout(stuckTimer);
-        // State -1 (unstarted) means the player loaded a video but couldn't play it —
-        // typically an embed-restricted video that won't fire onError. Skip after 2s.
-        if (event.data === -1) {
-          stuckTimer = setTimeout(() => {
-            if (player && player.getPlayerState() === -1) player.nextVideo();
-          }, 2000);
-        }
-      }
+      function onPlayerStateChange() {}
 
       function onPlayerPlaybackQualityChange() {}
 
