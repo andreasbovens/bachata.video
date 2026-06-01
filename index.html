@@ -280,14 +280,31 @@
         color: var(--lilac);
       }
 
-      /* Custom input — hidden until custom-mode */
-      .custom-input {
+      /* Custom row (input + play) — hidden until custom-mode */
+      .custom-row {
         display: none;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .dock-inner.custom-mode .custom-row { display: flex; }
+
+      .custom-input-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .custom-input {
+        width: 100%;
         min-width: 0;
         background: rgba(255, 245, 232, 0.06);
         border: 1px solid var(--hairline-strong);
         border-radius: 10px;
-        padding: 10px 14px;
+        padding: 10px 40px 10px 14px;
         color: var(--ink);
         font-family: "Familjen Grotesk", system-ui, sans-serif;
         font-size: 14px;
@@ -297,12 +314,19 @@
       .custom-input::placeholder { color: var(--ink-dim); }
       .custom-input:focus { border-color: var(--lilac); box-shadow: 0 0 0 2px rgba(180,120,255,0.2); }
 
-      /* Close + Play buttons — hidden until custom-mode */
-      .ctrl.custom-close { display: none; }
-      .dock-inner.custom-mode .ctrl.custom-close { display: inline-flex; }
+      .custom-close {
+        position: absolute; right: 6px;
+        display: flex; align-items: center; justify-content: center;
+        width: 30px; height: 30px;
+        background: none; border: none; border-radius: 7px;
+        color: var(--ink-dim); cursor: pointer;
+        transition: color 0.12s, background 0.12s;
+      }
+
+      .custom-close:hover { color: var(--ink); background: rgba(255,245,232,0.08); }
+      .custom-close svg { width: 14px; height: 14px; }
 
       .ctrl.custom-play {
-        display: none;
         width: auto;
         padding: 0 16px;
         background: var(--lilac);
@@ -316,10 +340,8 @@
 
       .ctrl.custom-play:hover { background: #c496ff; }
 
-      /* Custom mode: swap channels out, input in */
+      /* Custom mode: swap channels out, custom row in */
       .dock-inner.custom-mode .channels { display: none; }
-      .dock-inner.custom-mode .custom-input { display: block; }
-      .dock-inner.custom-mode .ctrl.custom-play { display: inline-flex; }
 
       .controls {
         display: flex; gap: 8px; align-items: center;
@@ -427,21 +449,122 @@
 
       #cookies-eu-banner button:hover { transform: translateY(-1px); }
 
-      .ctrl-meta {
-        display: flex; flex-direction: column; align-items: flex-end; gap: 3px;
-        font-size: 10px;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
+      /* More (⋯) popover */
+      .controls { position: relative; }
+
+      .more-popover {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        right: 0;
+        min-width: 148px;
+        padding: 6px;
+        background: var(--dock-bg);
+        backdrop-filter: blur(20px) saturate(140%);
+        -webkit-backdrop-filter: blur(20px) saturate(140%);
+        border: 1px solid var(--hairline-strong);
+        border-radius: 14px;
+        display: flex; flex-direction: column; gap: 2px;
+        z-index: 20;
       }
 
-      .ctrl-meta a { color: var(--ink-dim); text-decoration: none; }
-      .ctrl-meta a:hover { color: var(--ink); }
+      .more-popover[hidden] { display: none; }
+
+      .more-popover a,
+      .more-popover button {
+        display: block; width: 100%;
+        padding: 8px 12px;
+        font-family: "Familjen Grotesk", system-ui, sans-serif;
+        font-size: 13px; text-align: left;
+        color: var(--ink-dim);
+        background: none; border: 0; border-radius: 9px;
+        cursor: pointer; text-decoration: none;
+        transition: background 0.12s, color 0.12s;
+      }
+
+      .more-popover a:hover,
+      .more-popover button:hover {
+        background: rgba(255,245,232,0.07);
+        color: var(--ink);
+      }
+
+      /* Hide fullscreen on touch devices (iOS Safari doesn't support it) */
+      @media (hover: none) and (pointer: coarse) {
+        #fullscreen { display: none; }
+      }
 
       @media (max-width: 520px) {
         header { padding: 14px 14px 8px; }
         .stage { margin: 0; border-radius: 0; border-left: 0; border-right: 0; }
         .stage::before { display: none; }
         .dock { padding: 10px; }
+      }
+
+      /* Landscape mobile — sidebar layout */
+      @media (orientation: landscape) and (max-height: 500px) {
+        .shell {
+          grid-template-rows: 1fr;
+          grid-template-columns: 1fr 158px;
+          grid-template-areas: "stage dock";
+        }
+
+        header { display: none; }
+
+        .stage {
+          grid-area: stage;
+          margin: 0;
+          border-radius: 0;
+          border: 0;
+        }
+
+        .stage::before { display: none; }
+
+        nav.dock {
+          grid-area: dock;
+          padding: 8px 8px 8px 0;
+        }
+
+        .dock-inner {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          padding: 10px;
+          gap: 6px;
+        }
+
+        .channels {
+          flex-direction: column;
+          overflow-x: hidden;
+          overflow-y: auto;
+          flex: 1;
+          scroll-snap-type: y mandatory;
+          gap: 4px;
+          padding: 2px;
+        }
+
+        .chan {
+          font-size: 12px;
+          padding: 7px 10px;
+          border-radius: 10px;
+          width: 100%;
+        }
+
+        .chan-custom { position: static; }
+
+        .custom-row {
+          width: 100%;
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .controls {
+          border-left: 0;
+          border-top: 1px solid var(--hairline);
+          padding-left: 0;
+          padding-top: 8px;
+          justify-content: flex-end;
+          gap: 6px;
+          margin-top: auto;
+        }
       }
     </style>
 
@@ -501,17 +624,26 @@
             <a class="chan" href="?list=dance" id="dance">Dance Demos</a>
             <button class="chan chan-custom" id="custombtn" title="Load custom playlist">+ Custom</button>
           </div>
-          <input class="custom-input" id="custom-url" type="url" placeholder="Paste a YouTube playlist URL…" autocomplete="off" spellcheck="false" />
+          <div class="custom-row">
+            <div class="custom-input-wrap">
+              <input class="custom-input" id="custom-url" type="url" placeholder="Paste a YouTube playlist URL…" autocomplete="off" spellcheck="false" />
+              <button class="custom-close" id="custom-close" title="Cancel" aria-label="Cancel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+            <button class="ctrl custom-play" id="custom-load">Play</button>
+          </div>
           <div class="controls" aria-label="Player controls">
-            <button class="ctrl custom-close" id="custom-close" title="Cancel" aria-label="Cancel">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
-                <path d="M18 6L6 18M6 6l12 12"/>
+            <button class="ctrl" id="more-btn" title="More" aria-label="More options">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>
               </svg>
             </button>
-            <button class="ctrl custom-play" id="custom-load">Play</button>
-            <div class="ctrl-meta">
-              <a href="privacy.html">Privacy</a>
-              <a href="#" id="custom-reset">Reset cookies</a>
+            <div class="more-popover" id="more-popover" hidden>
+              <a href="privacy.html">Privacy policy</a>
+              <button id="custom-reset">Reset cookies</button>
             </div>
             <button class="ctrl" id="nextsong" title="Next song" aria-label="Next song">
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -762,6 +894,23 @@
         e.preventDefault();
         cookiesBanner.deleteCookie(cookiesBanner.cookieName);
         window.location.reload();
+      });
+
+      // More (⋯) popover
+      const moreBtn = document.getElementById("more-btn");
+      const morePopover = document.getElementById("more-popover");
+
+      moreBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        morePopover.hidden = !morePopover.hidden;
+      });
+
+      document.addEventListener("click", function () {
+        morePopover.hidden = true;
+      });
+
+      morePopover.addEventListener("click", function (e) {
+        e.stopPropagation();
       });
 
       /* Fathom — preserve original goal IDs */
