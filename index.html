@@ -14,7 +14,7 @@
       rel="stylesheet"
     />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <link rel="apple-touch-icon" href="/icon.svg" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="msapplication-TileColor" content="#0a0014" />
@@ -294,7 +294,10 @@
       .custom-input::placeholder { color: var(--ink-dim); }
       .custom-input:focus { border-color: var(--lilac); box-shadow: 0 0 0 2px rgba(180,120,255,0.2); }
 
-      /* Play button — hidden until custom-mode */
+      /* Close + Play buttons — hidden until custom-mode */
+      .ctrl.custom-close { display: none; }
+      .dock-inner.custom-mode .ctrl.custom-close { display: inline-flex; }
+
       .ctrl.custom-play {
         display: none;
         width: auto;
@@ -497,6 +500,11 @@
           </div>
           <input class="custom-input" id="custom-url" type="url" placeholder="Paste a YouTube playlist URL…" autocomplete="off" spellcheck="false" />
           <div class="controls" aria-label="Player controls">
+            <button class="ctrl custom-close" id="custom-close" title="Cancel" aria-label="Cancel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
             <button class="ctrl custom-play" id="custom-load">Play</button>
             <div class="ctrl-meta">
               <a href="privacy.html">Privacy</a>
@@ -805,6 +813,10 @@
         dockInner.classList.remove("custom-mode");
         createPlayer(listId);
       }
+
+      document.getElementById("custom-close").addEventListener("click", () => {
+        dockInner.classList.remove("custom-mode");
+      });
 
       customLoad.addEventListener("click", loadCustomPlaylist);
       customUrlInput.addEventListener("keydown", e => {
