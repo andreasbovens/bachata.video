@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--
+  OG image generator for bachata.video
+  ─────────────────────────────────────
+  Open this file in a browser, then screenshot the card at exactly 1200×630.
+  Save the result as og.png in the same folder.
+
+  Quick way with Chrome:
+    1. Open DevTools → toggle device toolbar (Ctrl/Cmd+Shift+M)
+    2. Set custom size: 1200 × 630
+    3. Right-click the page → "Capture screenshot"
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&family=Instrument+Serif:ital@0;1&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      background: #0a0014;
+      font-family: "Bricolage Grotesque", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 65% 80% at 10% 0%,   rgba(255, 45,  138, 0.38), transparent 60%),
+        radial-gradient(ellipse 50% 60% at 90% 0%,   rgba(255,201,  77, 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 70% at 95% 100%, rgba(180,120, 255, 0.28), transparent 60%),
+        radial-gradient(ellipse 55% 60% at  0% 100%, rgba(  0,224, 199, 0.16), transparent 60%),
+        #0a0014;
+    }
+
+    .card {
+      position: relative;
+      width: 1200px;
+      height: 630px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .logo {
+      font-size: 108px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #fff5e8;
+      line-height: 1;
+    }
+
+    .logo .dot  { color: #ff2d8a; }
+    .logo .tld  {
+      font-family: "Instrument Serif", serif;
+      font-style: italic;
+      font-weight: 400;
+      color: #ffc94d;
+    }
+
+    .tagline {
+      font-family: "Instrument Serif", serif;
+      font-style: italic;
+      font-size: 28px;
+      color: #a78baa;
+      letter-spacing: 0.01em;
+    }
+
+    .pill {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border: 1px solid rgba(255,245,232,0.25);
+      border-radius: 999px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #fff5e8;
+      background: rgba(255,245,232,0.05);
+    }
+
+    .pill-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #ff2d8a;
+      box-shadow: 0 0 14px #ff2d8a;
+    }
+
+    /* Gradient border around the card edge */
+    .card::before {
+      content: "";
+      position: absolute; inset: 12px;
+      border-radius: 28px;
+      border: 1.5px solid transparent;
+      background: linear-gradient(135deg, rgba(255,45,138,.5), rgba(255,91,58,.4) 40%, rgba(255,201,77,.3) 70%, rgba(180,120,255,.4)) border-box;
+      -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+      mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="card">
+    <div class="logo">bachata<span class="dot">.</span><span class="tld">video</span></div>
+    <div class="tagline">non-stop videos of the best bachata music</div>
+    <div class="pill"><div class="pill-dot"></div>New Bachata &nbsp;·&nbsp; Top Hits &nbsp;·&nbsp; Live &nbsp;·&nbsp; Dance Demos</div>
+  </div>
+</body>
+</html>
