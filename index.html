@@ -883,7 +883,7 @@
       }
 
       const fullscreenBtn = document.querySelector("#fullscreen");
-      if (!Element.prototype.requestFullscreen) {
+      if (!document.fullscreenEnabled) {
         fullscreenBtn.hidden = true;
       }
       fullscreenBtn.addEventListener("click", function () {
