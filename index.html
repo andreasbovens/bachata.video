@@ -883,7 +883,8 @@
       }
 
       const fullscreenBtn = document.querySelector("#fullscreen");
-      if (!document.fullscreenEnabled) {
+      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      if (isIOS) {
         fullscreenBtn.hidden = true;
       }
       fullscreenBtn.addEventListener("click", function () {
