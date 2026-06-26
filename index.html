@@ -882,7 +882,11 @@
         if (element.msRequestFullscreen) return element.msRequestFullscreen();
       }
 
-      document.querySelector("#fullscreen").addEventListener("click", function () {
+      const fullscreenBtn = document.querySelector("#fullscreen");
+      if (!document.fullscreenEnabled && !document.webkitFullscreenEnabled) {
+        fullscreenBtn.hidden = true;
+      }
+      fullscreenBtn.addEventListener("click", function () {
         // Try the iframe first (works on Android); fall back to the stage wrapper
         const iframe = document.getElementById("player");
         const target = (iframe && iframe.tagName === "IFRAME") ? iframe : document.querySelector(".stage");
