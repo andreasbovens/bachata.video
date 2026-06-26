@@ -488,6 +488,10 @@
       }
 
 
+      @media (hover: none) and (pointer: coarse) {
+        #fullscreen { display: none; }
+      }
+
       @media (max-width: 520px) {
         header { padding: 14px 14px 8px; }
         .stage { margin: 0; border-radius: 0; border-left: 0; border-right: 0; }
@@ -883,10 +887,6 @@
       }
 
       const fullscreenBtn = document.querySelector("#fullscreen");
-      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-      if (isIOS) {
-        fullscreenBtn.hidden = true;
-      }
       fullscreenBtn.addEventListener("click", function () {
         // Try the iframe first (works on Android); fall back to the stage wrapper
         const iframe = document.getElementById("player");
