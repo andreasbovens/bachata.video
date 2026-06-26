@@ -487,10 +487,6 @@
         color: var(--ink);
       }
 
-      /* Hide fullscreen on touch devices (iOS Safari doesn't support it) */
-      @media (hover: none) and (pointer: coarse) {
-        #fullscreen { display: none; }
-      }
 
       @media (max-width: 520px) {
         header { padding: 14px 14px 8px; }
@@ -858,7 +854,7 @@
             rel: 0,
             autoplay: 1,
             color: "white",
-            fs: 0,
+            fs: 1,
             iv_load_policy: 3,
             modestbranding: 1
           },
@@ -880,14 +876,17 @@
       });
 
       function launchIntoFullscreen(element) {
-        if (element.requestFullscreen) element.requestFullscreen();
-        else if (element.mozRequestFullScreen) element.mozRequestFullScreen();
-        else if (element.webkitRequestFullscreen) element.webkitRequestFullscreen();
-        else if (element.msRequestFullscreen) element.msRequestFullscreen();
+        if (element.requestFullscreen) return element.requestFullscreen();
+        if (element.webkitRequestFullscreen) return element.webkitRequestFullscreen();
+        if (element.mozRequestFullScreen) return element.mozRequestFullScreen();
+        if (element.msRequestFullscreen) return element.msRequestFullscreen();
       }
 
       document.querySelector("#fullscreen").addEventListener("click", function () {
-        launchIntoFullscreen(document.querySelector(".stage"));
+        // Try the iframe first (works on Android); fall back to the stage wrapper
+        const iframe = document.getElementById("player");
+        const target = (iframe && iframe.tagName === "IFRAME") ? iframe : document.querySelector(".stage");
+        launchIntoFullscreen(target);
       });
 
       document.querySelector("#custom-reset").addEventListener("click", function (e) {
